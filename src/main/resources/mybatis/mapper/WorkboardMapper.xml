@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="co.kr.mmsoft.mmworkboardservice.mapper.WorkboardMapper">
+
+    <select id="findAll" resultType="co.kr.mmsoft.mmworkboardservice.dto.ProjectPost">
+        SELECT workboard_id, account_id, title, content, name,
+               reg_date, update_date, passwd, url, workboard_rolename
+        FROM workboard
+        WHERE is_deleted = 'N'
+        ORDER BY reg_date DESC
+    </select>
+
+    <insert id="insert" parameterType="co.kr.mmsoft.mmworkboardservice.dto.ProjectPost">
+        INSERT INTO workboard (account_id, title, content, name, passwd, url, workboard_rolename, is_deleted, reg_date)
+        VALUES (#{accountId}, #{title}, #{content}, #{author}, #{passwd}, #{url}, #{category}, 'N', NOW())
+    </insert>
+
+    <update id="update" parameterType="co.kr.mmsoft.mmworkboardservice.dto.ProjectPost">
+        UPDATE workboard
+        SET title              = #{title},
+            content            = #{content},
+            passwd             = #{passwd},
+            url                = #{url},
+            workboard_rolename = #{category},
+            update_date        = NOW()
+        WHERE workboard_id = #{workboardId}
+          AND is_deleted   = 'N'
+    </update>
+
+    <update id="delete" parameterType="Long">
+        UPDATE workboard
+        SET is_deleted  = 'Y',
+            update_date = NOW()
+        WHERE workboard_id = #{workboardId}
+    </update>
+
+    <select id="checkPasswd" parameterType="co.kr.mmsoft.mmworkboardservice.dto.ProjectPost" resultType="int">
+        SELECT COUNT(*)
+        FROM workboard
+        WHERE workboard_id = #{workboardId}
+          AND passwd       = #{passwd}
+          AND is_deleted   = 'N'
+    </select>
+
+</mapper>
