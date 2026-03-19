@@ -1,18 +1,3 @@
-server:
-  port: 1993
-
-spring:
-  application:
-    name: mm-workboard-service
-
-  config:
-    import: "optional:configserver:http://localhost:1881"
-
-  datasource:
-    url: jdbc:mysql://localhost:3306/liveshop
-    username: liveshop
-    password: "1234"
-
 mybatis:
   type-aliases-package: co.kr.mmsoft.mmworkboardservice
   mapper-locations: classpath:mybatis/mapper/*.xml

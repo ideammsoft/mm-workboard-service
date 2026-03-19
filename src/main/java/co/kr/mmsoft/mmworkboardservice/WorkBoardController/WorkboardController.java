@@ -2,11 +2,13 @@ package co.kr.mmsoft.mmworkboardservice.WorkBoardController;
 
 import co.kr.mmsoft.mmworkboardservice.dto.ProjectPost;
 import co.kr.mmsoft.mmworkboardservice.mapper.WorkboardMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +27,24 @@ public class WorkboardController {
     }
 
     @PostMapping("/write")
-    public ResponseEntity<String> write(@RequestBody ProjectPost post) {
+    public ResponseEntity<String> write(
+            @RequestHeader(value = "Authorization", required = false) String authHeader,
+            @RequestBody ProjectPost post) {
+        // accountId가 없으면 JWT 토큰의 sub 클레임에서 추출
+        if (post.getAccountId() == null && authHeader != null && authHeader.startsWith("Bearer ")) {
+            try {
+                String token = authHeader.substring(7);
+                String[] parts = token.split("\\.");
+                byte[] payloadBytes = Base64.getUrlDecoder().decode(parts[1]);
+                Map<?, ?> claims = new ObjectMapper().readValue(payloadBytes, Map.class);
+                Object sub = claims.get("sub");
+                if (sub != null) {
+                    post.setAccountId(Long.parseLong(sub.toString()));
+                }
+            } catch (Exception e) {
+                log.warn("JWT에서 accountId 추출 실패: {}", e.getMessage());
+            }
+        }
         int result = workboardMapper.insert(post);
         return result > 0 ? ResponseEntity.ok("등록되었습니다.") : ResponseEntity.internalServerError().body("등록 실패");
     }
