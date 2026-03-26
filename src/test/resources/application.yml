@@ -1,0 +1,7 @@
+spring:
+  config:
+    import: "optional:none"
+  cloud:
+    config:
+      enabled: false
+      fail-fast: false
