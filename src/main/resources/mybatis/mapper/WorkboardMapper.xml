@@ -8,7 +8,7 @@
         SELECT workboard_id, account_id, title, content, name,
                reg_date, update_date, passwd, url, workboard_rolename
         FROM workboard
-        WHERE is_deleted = 'N'
+        WHERE (is_deleted = 'N' OR is_deleted IS NULL)
         ORDER BY reg_date DESC
     </select>
 
