@@ -9,7 +9,7 @@
                reg_date, update_date, passwd, url, workboard_rolename
         FROM workboard
         WHERE (is_deleted = 'N' OR is_deleted IS NULL)
-        ORDER BY reg_date DESC
+        ORDER BY workboard_id DESC
     </select>
 
     <insert id="insert" parameterType="co.kr.mmsoft.mmworkboardservice.dto.ProjectPost">
