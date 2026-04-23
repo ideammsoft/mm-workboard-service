@@ -18,7 +18,8 @@ public class ProjectPost {
     private String updateDate;
     private String passwd;
     private String url;
-    private String workboardRolename;
-    private String author;
-    private String category;
+    private String  workboardRolename;
+    private String  author;
+    private String  category;
+    private Integer views;
 }

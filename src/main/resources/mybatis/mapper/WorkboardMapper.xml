@@ -6,7 +6,8 @@
 
     <select id="findAll" resultType="co.kr.mmsoft.mmworkboardservice.dto.ProjectPost">
         SELECT workboard_id, account_id, title, content, name,
-               reg_date, update_date, passwd, url, workboard_rolename
+               reg_date, update_date, passwd, url, workboard_rolename,
+               COALESCE(view_count, 0) AS views
         FROM workboard
         WHERE (is_deleted = 'N' OR is_deleted IS NULL)
         ORDER BY workboard_id DESC
@@ -43,5 +44,13 @@
           AND passwd       = #{passwd}
           AND is_deleted   = 'N'
     </select>
+
+    <update id="incrementViewCount" parameterType="Long">
+        UPDATE workboard
+        SET view_count  = COALESCE(view_count, 0) + 1,
+            update_date = update_date
+        WHERE workboard_id = #{workboardId}
+          AND (is_deleted = 'N' OR is_deleted IS NULL)
+    </update>
 
 </mapper>

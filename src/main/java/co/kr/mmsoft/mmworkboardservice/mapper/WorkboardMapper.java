@@ -12,4 +12,5 @@ public interface WorkboardMapper {
     int update(ProjectPost post);
     int delete(Long workboardId);
     int checkPasswd(ProjectPost post);
+    int incrementViewCount(Long workboardId);
 }

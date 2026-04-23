@@ -68,4 +68,10 @@ public class WorkboardController {
         int count = workboardMapper.checkPasswd(post);
         return count > 0 ? ResponseEntity.ok("ok") : ResponseEntity.status(401).body("비밀번호 불일치");
     }
+
+    @PostMapping("/view/{workboardId}")
+    public ResponseEntity<Void> incrementView(@PathVariable Long workboardId) {
+        workboardMapper.incrementViewCount(workboardId);
+        return ResponseEntity.ok().build();
+    }
 }
