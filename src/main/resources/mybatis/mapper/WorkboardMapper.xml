@@ -5,8 +5,13 @@
 <mapper namespace="co.kr.mmsoft.mmworkboardservice.mapper.WorkboardMapper">
 
     <select id="findAll" resultType="co.kr.mmsoft.mmworkboardservice.dto.ProjectPost">
-        SELECT workboard_id, account_id, title, content, name,
-               reg_date, update_date, passwd, url, workboard_rolename,
+        SELECT workboard_id        AS workboardId,
+               account_id          AS accountId,
+               title, content, name,
+               reg_date            AS regDate,
+               update_date         AS updateDate,
+               passwd, url,
+               workboard_rolename  AS workboardRolename,
                COALESCE(view_count, 0) AS views
         FROM workboard
         WHERE (is_deleted = 'N' OR is_deleted IS NULL)
